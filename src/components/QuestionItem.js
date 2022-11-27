@@ -8,6 +8,28 @@ function QuestionItem({ question }) {
       {answer}
     </option>
   ));
+  function handleDelete() {
+    fetch(`http://localhost:4000/questions/${question.id}`, {
+      method: "DELETE",
+    })
+    .then(response => response.json())
+    .then(data => console.log("deleted!"))
+  }
+
+  function changeIndex(event) {
+    fetch(`http://localhost:4000/questions/${question.id}`,{
+      method: "PATCH",
+      headers: {
+        "Content-Type" : "application/json",
+      },
+      body: JSON.stringify({
+        correctIndex : event.target.value
+      })
+      })
+      .then(response => response.json())
+      .then(data => console.log(data))
+  }
+  
 
   return (
     <li>
@@ -15,9 +37,9 @@ function QuestionItem({ question }) {
       <h5>Prompt: {prompt}</h5>
       <label>
         Correct Answer:
-        <select defaultValue={correctIndex}>{options}</select>
+        <select onChange={changeIndex} defaultValue={correctIndex}>{options}</select>
       </label>
-      <button>Delete Question</button>
+      <button onClick={handleDelete}>Delete Question</button>
     </li>
   );
 }
